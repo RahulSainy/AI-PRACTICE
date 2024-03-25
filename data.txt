@@ -1,0 +1,273 @@
+MQTT protocol
+MQTT stands for Message Queuing Telemetry Transport. MQTT is a machine to machine internet of things connectivity protocol. It is an extremely lightweight and publish-subscribe messaging transport protocol. This protocol is useful for the connection with the remote location where the bandwidth is a premium. These characteristics make it useful in various situations, including constant environment such as for communication machine to machine and internet of things contexts. It is a publish and subscribe system where we can publish and receive the messages as a client. It makes it easy for communication between multiple devices. It is a simple messaging protocol designed for the constrained devices and with low bandwidth, so it's a perfect solution for the internet of things applications.
+Characteristics of MQTT
+The MQTT has some unique features which are hardly found in other protocols. Some of the features of an MQTT are given below:
+It is a machine to machine protocol, i.e., it provides communication between the devices.
+It is designed as a simple and lightweight messaging protocol that uses a publish/subscribe system to exchange the information between the client and the server.
+It does not require that both the client and the server establish a connection at the same time.
+It provides faster data transmission, like how WhatsApp/messenger provides a faster delivery. It's a real-time messaging protocol.
+It allows the clients to subscribe to the narrow selection of topics so that they can receive the information they are looking for.
+History of MQTT
+
+The MQTT was developed by Dr. Andy Stanford-Clark, IBM, and Arlen Nipper. The previous versions of protocol 3.1 and 3.1.1 were made available under MQTT ORG. In 2014, the MQTT was officially published by OASIS. The OASIS becomes a new home for the development of the MQTT. Then, the OASIS started the further development of the MQTT. Version 3.1.1 is backward comfortable with a 3.1 and brought only minor changes such as changes to the connect message and clarification of the 3.1 version. The recent version of MQTT is 5.0, which is a successor of the 3.1.1 version. Version 5.0 is not backward, comfortable like version 3.1.1. According to the specifications, version 5.0 has a significant number of features that make the code in place.
+The major functional objectives in version 5.0 are:
+Enhancement in the scalability and the large-scale system in order to set up with the thousands or the millions of devices.
+Improvement in the error reporting
+MQTT Architecture
+To understand the MQTT architecture, we first look at the components of the MQTT.
+Message
+Client
+Server or Broker
+TOPIC
+Message
+The message is the data that is carried out by the protocol across the network for the application. When the message is transmitted over the network, then the message contains the following parameters:
+Payload data
+Quality of Service (QoS)
+Collection of Properties
+Topic Name
+Client
+In MQTT, the subscriber and publisher are the two roles of a client. The clients subscribe to the topics to publish and receive messages. In simple words, we can say that if any program or device uses an MQTT, then that device is referred to as a client. A device is a client if it opens the network connection to the server, publishes messages that other clients want to see, subscribes to the messages that it is interested in receiving, unsubscribes to the messages that it is not interested in receiving, and closes the network connection to the server.
+In MQTT, the client performs two operations:
+In MQTT, the client performs two operations:
+Publish: When the client sends the data to the server, then we call this operation as a publish.
+Subscribe: When the client receives the data from the server, then we call this operation a subscription.
+Server
+The device or a program that allows the client to publish the messages and subscribe to the messages. A server accepts the network connection from the client, accepts the messages from the client, processes the subscribe and unsubscribe requests, forwards the application messages to the client, and closes the network connection from the client.
+TOPIC
+
+The label provided to the message is checked against the subscription known by the server is known as TOPIC.
+Architecture of MQTT
+
+Now we will look at the architecture of MQTT. To understand it more clearly, we will look at the example. Suppose a device has a temperature sensor and wants to send the rating to the server or the broker. If the phone or desktop application wishes to receive this temperature value on the other side, then there will be two things that happened. The publisher first defines the topic; for example, the temperature then publishes the message, i.e., the temperature's value. After publishing the message, the phone or the desktop application on the other side will subscribe to the topic, i.e., temperature and then receive the published message, i.e., the value of the temperature. The server or the broker's role is to deliver the published message to the phone or the desktop application.
+MQTT Message Format
+
+The MQTT uses the command and the command acknowledgment format, which means that each command has an associated acknowledgment. As shown in the above figure that the connect command has connect acknowledgment, subscribe command has subscribe acknowledgment, and publish command has publish acknowledgment. This mechanism is similar to the handshaking mechanism as in TCP protocol.
+Now we will look at the packet structure or message format of the MQTT.
+
+The MQTT message format consists of 2 bytes fixed header, which is present in all the MQTT packets. The second field is a variable header, which is not always present. The third field is a payload, which is also not always present. The payload field basically contains the data which is being sent. We might think that the payload is a compulsory field, but it does not happen. Some commands do not use the payload field, for example, disconnect message.
+Fixed Header
+Let's observe the format of the fixed header.
+
+As we can observe in the above format that the fixed header contains two bytes. The first byte contains the following fields:
+MQTT Control Packet Type: It occupies 4 bits, i.e., 7 to 4-bit positions. This 4-bit is an assigned value, and each bit represents the MQTT control packet type.
+Flag specific to each MQTT packet type: The remaining 4-bits represent flag specific to each MQTT packet type.
+The byte 2 contains the remaining length, which is a variable-length byte integer. It represents the number of bytes remaining in a current control packet, including data in the variable header and payload. Therefore, we can say that the remaining length is equal to the sum of the data in the variable header and the payload.
+MQTT Control Packet Types
+
+The above table shows the control packet types with 4-bit value and direction flow. As we can observe that every command is followed by acknowledgment like CONNECT has CONNACK, PUBLISH has PUBACK, PUBREC, PUBREL, and PUBCOMP, SUBSCRIBE has SUBACK, UNSUBSCRIBE has UNSUBACK.
+Flag Bit
+
+The above table shows the flag value associated with each command. Here, reserved refers to future use, which means that it is not being used right now. In the case of PUBLISH command, flag bits are further divided into DUP, QoS, and RETAIN, where DUP is a duplicate delivery of a PUBLISH packet, QoS is Quality of Service, and RETAIN is retained message flag.
+Remaining length
+The remaining length is a variable-length integer that denotes the number of bytes remaining within the current control packet, including data in the variable header and the payload. Therefore, the remaining length is equal to the data in the variable header plus payload.
+Remaining length = length of variable header + length of payload
+For example, if the length of the variable header is 20 and the length of the payload is 30, then the remaining length is 50.
+The remaining length can be used upto 4 bytes, and it starts from 2 bytes and can be used upto 4 bytes.
+This field uses 7-bit for the lengths, and MSB bit can be used to continue a flag. If the continuation flag is 1, the next byte is also a part of the
+remaining length. If the continuation flag is 0, a byte is the last one of the remaining length.
+Variable header
+Some types of MQTT control packet types contain an optional field also, i.e., variable header component. This field resides between the fixed header and the payload. The content of the variable header depends upon the packet type. The variable header contains the packet identifier field, which is common in several packet types. The variable header component of many MQTT control packet types includes 2-byte integer, i.e., the packet identifier field.
+The given list below contains the packet identifier field:
+PUBLISH
+PUBACK
+PUBREC
+PUBREL
+PUBCOMP
+SUBSCRIBE
+SUBACK
+UNSUBSCRIBE
+UNSUBACK
+Key points related to the packet identifier field:
+A PUBLISH packet should not contain the packet identifier field if the value of QoS (Quality of Service) is set to zero. It implies that if the value of QoS is greater than zero, only the PUBLISH packet will contain the packet identifier field.
+When a client sends a new SUBSCRIBE, UNSUBSCRIBE, or PUBLISH MQTT control packet, it should assign a non-zero packet identifier that is currently unused.
+When a server sends a new PUBLISH MQTT control packet, it should assign a non-zero packet identifier that is currently unused.
+A PUBACK, PUBREC, PUBUREL, PUBREC are the acknowledgment packets of PUBLISH command that contain the same packet identifier as the PUBLISH packet.
+A SUBACK and UNSUBACK are the acknowledgment packets of SUBSCRIBE and UNSUBSCRIBE, respectively. Both the packets, i.e., SUBACK and UNSUBACK, use the same packet identifier as the SUBSCRIBE and UNSUBSCRIBE packets.
+The packet identifier can be reusable after processing the corresponding acknowledgment packet. It can be defined as follows:
+If the value of QoS is 1 then the acknowledgment packet of PUBLISH would be PUBACK. If it processes the PUBACK, then the packet identifier of PUBACK can be reused.
+If the QoS value is 2 then the acknowledgment packet of PUBLISH would be either PUBCOMP or PUBREC.
+Payload
+In the ICMP message format, the last MQTT control packet is the payload. This field contains the data which is to be sent. For example, in the case of the CONNECT packet, the payload is a client ID, the username and password, and the PUBLISH packet, the payload is just an application message.
+
+
+SMQTT Protocol
+Following are the features of SMQTT protocol.
+• It is extension to simple MQTT protocol.
+• SMQTT stands for Secure Message Queue Telemetry Transport.
+• It uses light weight attribute based encryption.
+• It is session layer protocol.
+• It has broadcast encryption feature which does encryption of one message and delivers the same to multiple nodes.
+• Algorithm is divided into four parts viz. setup, encryption, publish and decryption.
+• Like MQTT, it uses broker based subscribe and publish architecture.
+• In the setup phase, subscribers and publishers register themselves with broker and obtain master secret key.
+• Before publishing, data is being encrypted. The encrypted data is published by the broker. This is being received by the subscribers which perform decryption to perform decoding of the data with the same master key.
+• Key generation algorithm is not standardized and depends on developers. Encryption algorithms depend on developers too.
+
+
+
+SMQTT (Secure Message Queue Telemetry Transport)
+SMQTT (Secure Message Queue Telemetry Transport) is an extension of MQTT protocol which uses encryption based on lightweight attribute encryption. The main advantage of this encryption is that it has a broadcast encryption feature. In this features, one message is encrypted and delivered to multiple other nodes. The process of message transfer and receiving consists of four major stages:
+Setup: In this phase, the publishers and subscribers register themselves to the broker and get a secret master key.
+Encryption: When the data is published to broker, it is encrypted by broker.
+Publish: The broker publishes the encrypted message to the subscribers.
+Decryption: Finally the received message is decrypted by subscribers with the same master key.
+SMQTT is proposed only to enhance MQTT security feature.
+
+
+CoAP
+CoAP (Constrained Application Protocol) is a session layer protocol that provides the RESTful (HTTP) interface between HTTP client and server. It is designed by IETF Constrained RESTful Environment (CoRE) working group. It is designed to use devices on the same constrained network between devices and general nodes on the Internet. CoAP enables low-power sensors to use RESTful services while meeting their low power constraints. This protocol is specially built for IoT systems primarily based on HTTP protocols.
+This network is used within the limited network or in a constrained environment. The whole architecture of CoAP consists of CoAP client, CoAP server, REST CoAP proxy, and REST internet.
+
+The data is sent from CoAP clients (such as smartphones, RFID sensors, etc.) to the CoAP server and the same message is routed to REST CoAP proxy. The REST CoAP proxy interacts outside the CoAP environment and uploads the data over REST internet.
+FEATURES OF COAP PROTOCOLS
+The CoAP stands for Constrained Application Protocol, and it is defined in RFC 7252. CoAP is a simple protocol with low overhead specifically designed for constrained devices (such as microcontrollers) and constrained networks. This protocol is used in M2M data exchange and is very similar to HTTP. 
+The main features of CoAP protocols are:
+Web protocol used in M2M with constrained requirements
+Asynchronous message exchange
+Low overhead and very simple to parse
+URI and content-type support
+Proxy and caching capabilities
+From the abstraction protocol layer, CoAP can be represented as:
+
+As you can see there are two different layers that make CoAp protocol: Messages and Request/Response. The Messages layer deals with UDP and with asynchronous messages. The Request/Response layer manages request/response interaction based on request/response messages.
+CoAP supports four different message types:
+Confirmable
+Non-confirmable
+Acknowledgment
+Reset
+Before going deeper into the CoAp protocol, structure is useful to define some terms that we will use later:
+Endpoint: An entity that participates in the CoAP protocol. Usually, an Endpoint is identified with a host
+Sender: The entity that sends a message
+Recipient: The destination of a message
+Client: The entity that sends a request and the destination of the response
+Server: The entity that receives a request from a client and sends back a response to the client.
+CoAP Messages Model
+This is the lowest layer of CoAP. This layer deals with UDP exchanging messages between endpoints. Each CoAP message has a unique ID; this is useful to detect message duplicates. A CoAP message is built by these parts:
+A binary header
+A compact options
+Payload
+As said before, the CoAP protocol uses two kinds of messages:
+Confirmable message
+Non-confirmable message
+A confirmable message is a reliable message. When exchanging messages between two endpoints, these messages can be reliable. In CoAP, a reliable message is obtained using a Confirmable message (CON). Using this kind of message, the client can be sure that the message will arrive at the server. A Confirmable message is sent again and again until the other party sends an acknowledge message (ACK). The ACK message contains the same ID of the confirmable message (CON).
+The picture below shows the message exchange process:
+
+If the server has troubles managing the incoming request, it can send back a Rest message (RST) instead of the Acknowledge message (ACK):
+
+The other message category is the Non-confirmable (NON) messages. These are messages that don’t require an Acknowledge by the server. They are unreliable messages or in other words messages that do not contain critical information that must be delivered to the server. To this category belongs messages that contain values read from sensors.
+Even if these messages are unreliable, they have a unique ID.
+
+CoAp Request/Response Model
+The CoAP Request/Response is the second layer in the CoAP abstraction layer. The request is sent using a Confirmable (CON) or Non-Confirmable (NON) message. There are several scenarios depending on if the server can answer immediately to the client request or the answer if not available.
+If the server can answer immediately to the client request, then if the request is carried using a Confirmable message (CON), the server sends back to the client an Acknowledge message containing the response or the error code:
+
+As you can notice in the CoAP message, there is a Token. The Token is different from the Message-ID and it is used to match the request and the response.
+If the server can’t answer to the request coming from the client immediately, then it sends an Acknowledge message with an empty response. As soon as the response is available, then the server sends a new Confirmable message to the client containing the response. At this point, the client sends back an Acknowledge message:
+
+If the request coming from the client is carried using a NON-confirmable message, then the server answer using a NON-confirmable message.
+CoAp Message Format
+This paragraph covers the CoAP Message format. By now, we have discussed different kinds of messages exchanged between the client and the server. Now it is time to analyze the message format. The constrained application protocol is the meat for constrained environments, and for this reason, it uses compact messages. To avoid fragmentation, a message occupies the data section of a UDP datagram. A message is made by several parts:
+
+Where:
+Ver: It is a 2 bit unsigned integer indicating the version
+T: it is a 2 bit unsigned integer indicating the message type: 0 confirmable, 1 non-confirmable
+TKL: Token Length is the token 4 bit length
+Code: It is the code response (8 bit length)
+Message ID: It is the message ID expressed with 16 bit
+
+
+CoAP Vs. MQTT
+An important aspect to cover is the main differences between CoAP and MQTT. As you may know, MQTT is another protocol widely used in IoT. There are several differences between these two protocols. The first aspect to notice is the different paradigm used. MQTT uses a publisher-subscriber while CoAP uses a request-response paradigm. MQTT uses a central broker to dispatch messages coming from the publisher to the clients. CoAP is essentially a one-to-one protocol very similar to the HTTP protocol. Moreover, MQTT is an event-oriented protocol while CoAP is more suitable for state transfer.
+…………………………………………………………………………………………………………………
+XMPP Protocol
+XMPP is a short form for Extensible Messaging Presence Protocol. It’s protocol for streaming XML elements over a network in order to exchange messages and presence information in close to real time. This protocol is mostly used by instant messaging applications like WhatsApp.
+Let’s dive into each character of word XMPP:
+X : It means eXtensible. XMPP is a open source project which can be changed or extended according to the need.
+M : XMPP is designed for sending messages in real time. It has very efficient push mechanism compared to other protocols.
+P : It determines whether you are online/offline/busy. It indicates the state.
+P : XMPP is a protocol, that is, a set of standards that allow systems to communicate with each other.
+These are the basic requirements of any Instant Messenger which are fulfilled by XMPP:
+Send and receive messages with other users.
+Check and share presence status
+Manage subscriptions to and from other users.
+Manage contact list
+Block communications(receive message, sharing presence status, etc) to specific users.
+Other XMPP features:
+Decentralised –
+XMPP is based on client-server architecture, i.e. clients don’t communicate directly, they do it with the help of server as intermediary. It is decentralised means there is no centralised XMPP server just like email, anyone can run their own XMPP server.
+
+
+
+
+Each XMPP client is identified by JID (Jabber ID).
+#JID
+ {
+   user,
+   server,
+   resource
+}
+For example, I’m a whatsApp user and I’m identified by my mobile number, so
+   user = "8767898790"
+   server = "whatsapp.com"
+   resource = "mobile"
+   JID : 8767898790@whatsapp.com/mobile
+
+resource is used in case the application support mobile as well as desktop or web application, so it can be optional in case a Instant Messenger Application support only single kind of resource.
+XMPP implementation –
+The original protocol for XMPP is Transmission Control Protocol, using open ended XML streams over long lived TCP connections.
+In some cases, there are restricted firewalls, XMPP (port 5222) is blocked, so it can’t be used for web applications and users behind restricted firewalls, to overcome this, XMPP community also developed a HTTP transport.
+And as the client uses HTTP, most firewalls allow clients to fetch and post messages without any problem. Thus, in scenarios where the TCP port used by XMPP is blocked, a server can listen on the normal HTTP port and the traffic should pass without problems.
+
+
+
+………………………………………………………………………………………………………………………………………………………..
+AMQP: Introducing the Advanced Message Queuing Protocol
+Services must be able to communicate with each other. Information is exchanged and data transmitted. To many people it sounds easier than it actually is, because there are several difficulties to overcome with such conversations between different applications: In IT, for example, there are language barriers (in the form of various programming languages) and you have to stick to a protocol so that it does not end up in chaos.
+The Advanced Message Queuing Protocol, or AMQP for short, promises a solution: a common protocol that can transport the information through a mediator. How does it work? And what else can AMQP do?
+What do you need AMQP for?
+The Advanced Message Queuing Protocol has been developed since 2003 and, by way of exception, does not originate from a dedicated tech company, but was first conceived by JPMorgan Chase, a US bank. There, they decided to continue designing the project together with others. However, in addition to IT companies such as Cisco, it was the financial sector that continued to be primarily interested in AMQP. Why is that? Because, there more than anywhere, time is money! The transmission of information plays a major role at a bank, a credit card company or an exchange. Several hundred thousand messages are exchanged per second there. If news arrives too late or not at all, it can be expensive.
+Since no commercial product was able to cope satisfactorily with the requirements at that time, project manager John O'Hara chose to conceive his own, separate protocol. O'Hara’s focus was on open standards such as TCP/IP and he decided to also make AMQP freely available, in order to advance the development of the protocol. Meanwhile, the OASIS working group, a non-profit organization, was working to develop the protocol.
+AMQP single-handedly solves several problems: the protocol (in cooperation with a messaging broker) ensures a robust data transfer, while also allowing messages to be stored in a queue. This in turn enables an asynchronous communication: sender and receiver do not have to work around each other. The recipient (consumer) of the message does not need to directly accept the information, process it, and confirm receipt to the sender (producer). Instead, they collect the message from the queue when they have capacity available. Meanwhile, this gives the producer the opportunity to continue working - so there is no idle time.
+The success of the relatively recent protocol also has to do with interoperability. The Advanced Message Queuing Protocol establishes a common basis of its own. This even allows the different applications to be written in different programming languages. In this way, even programs in different organizations can easily communicate with each other. And as AMQP is freely available, any company can use the protocol at no extra cost.
+ Note
+The P in AMQP stands for protocol: like other network protocols, AMQP establishes a set of rules and syntax for the communication of two or more participants.
+How does AMQP work?
+In the OSI model AMQP acts on the application layer, meaning it has direct contact with the various programs. IMAP (for email), FTP (for transferring files) and IRC (for instant messaging) are also active on this layer. To transmit the messages, the protocol relies on mediators, or messaging brokers. These take over the distribution of messages to different recipients according to defined rules. AMQP also controls the behavior of these mediation servers.
+ Note
+Because AMQP is an open standard, several messaging brokers are available. Apart from Apache Qpid and the Microsoft Windows Azure Service Bus, RabbitMQ is particularly popular. Learn more about how it works in our article about RabbitMQ.
+The Advanced Message Queuing Protocol therefore refers both to the communication between various participants and to the behavior of the brokers themselves. These contain their instructions from the messages.
+In the cosmos of AMQP there are three participants and one item:
+The message is the core element of the whole communication.
+The producer creates a message and sends it.
+The messaging broker distributes the message to different queues according to defined rules.
+The consumer takes the message out of the queue that they can access, and edits it.
+The mediation of the message is paused again with the broker. The exchange accepts the messages and routes the data to the correct queue. The exchange learns which queue the message belongs to from the binding. There are four different ways in which the exchange forwards messages.
+Exchange types
+The first kind, the direct exchange, sends messages to exactly one recipient and works with routing keys. One of these keys is given to the message. A queue in turn has a binding key. This identifies the queue to the exchange. If the routing key and binding key match, the message can be forwarded to the queue and therefore to the recipient of the message. It is also possible that a queue has several binding keys and therefore also comes into question for several routing keys. Conversely, multiple queues can also share one binding key, which is called multiple binding. The exchange replicates the message and sends it to multiple recipients.
+The fanout exchange works similarly. However, here the broker completely ignores the routing key. Instead, the exchange routes a message to all available queues and thereby duplicates the information. The topic exchange works in a different way. Similar to the direct exchange, routing key and binding keys are matched against each other, but there doesn’t have to be an exact match present. Instead, you use wildcards. This makes it possible to specifically provide messages for multiple queues.
+Finally, the headers exchange acts with the header of a message, instead of using a routing key. This contains values that are matched with the binding. The argument with the name x-match determines if all values must match (value: all) or only one must match the binding (value: any). While the former corresponds to the direct exchange, the latter can produce the same effect as a topic exchange.
+AMQP frames
+A frame is the basic unit with AMQP. A connection consists of the ordered sequence of frames. Order in this case means that the last frame must not arrive at the receiver until all other frames have first reached their destination. Each frame can be divided into three segments (in version 1.0):
+
+Frame header: This mandatory header has a size of 8 bytes. Here you will find information that determines the routing of the message.
+Extended header: This area is optional and has no set scope. It serves to expand the header in the future with further information.
+Frame body: The body contains the actual data to be transferred. The size is freely selectable. However, this area can also be left empty, and then the frame only serves to maintain the connection.
+The body of a frame, in turn, can take nine different forms:
+open: Negotiates the connection parameters between broker and client.
+begin: Indicates that a connection is starting.
+attach: The message is appended with a link that is necessary in order to use the data transfer.
+flow: Changes the status of a link.
+transfer: The actual message is transmitted with the transfer frame.
+disposition: A disposition frame provides information on changes to the information delivery.
+detach: Removes the link.
+end: Indicates that the connection will be terminated.
+close: Terminates the connection and declares that no further frames will be sent.
+Queues & messages
+Each queue has its own name, which identifies it to the other participants. Either a client or the broker determines the name. A queue is realized by a memory, which can either permanently sit on a hard disk or briefly in RAM. The permanent variant guarantees that the queue will continue to exist even after restarting a broker. But it does not guarantee that messages are also permanently secured: here, it depends on the message as to whether they are still available after a restart.
+What happens when a consumer cannot recall the message in queue, because, for example, the client or the connection has broken down? It is possible to decide whether a consumer must properly acknowledge the receipt of a message or whether the mere delivery is sufficient for success. If the first variant is chosen and the consumer does not need to send back a message, the broker tries to send the message to another consumer or to reach the actual recipient again. However, if the variant is activated without confirmation and the consumer does not retrieve the message, it will be lost.
+But it is also possible for a client to deliberately reject the acceptance of a message. This may be useful if message processing does not work. The feedback from the consumer causes the broker to either completely delete the message or incorporate it back into the queue.
+ Fact
+AMQP uses Port 5672
+AMQP 1.0 vs. 0-9-1
+There are currently two completely independent versions of Advanced Message Queuing Protocols. Version 1.0 was developed by the OASIS group. However, the slightly older version 0-9-1 is often used, especially with RabbitMQ. They are not compatible with each other. Version 1.0 differs primarily by the reduced importance of brokers, bindings and exchanges. 0-9-1 doesn't need this, but neither does it prohibit the use of such middlemen.
+
