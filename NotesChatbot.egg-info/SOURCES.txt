@@ -1,0 +1,8 @@
+setup.py
+NotesChatbot.egg-info/PKG-INFO
+NotesChatbot.egg-info/SOURCES.txt
+NotesChatbot.egg-info/dependency_links.txt
+NotesChatbot.egg-info/top_level.txt
+src/__init__.py
+src/helper.py
+src/prompt.py
